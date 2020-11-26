@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'constants.dart';
+import 'dataCalculation.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,6 +32,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Data data = Data();
+  String numValue = "";
+
   Expanded button({String value, String border = 'rect'}) {
     if (border == 'circle') {
       return Expanded(
@@ -46,6 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {
               print('Pressed! $value');
               input += value;
+
+              print("Value = $value");
+              data.addData(numValue);
+              input = data.calc().toString();
+              numValue = "";
+              print('Input : $input');
             });
           },
         ),
@@ -61,8 +71,26 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             setState(() {
               {
-                print('Pressed! $value');
-                input += value;
+                print("Value is now : $value");
+                if (value == '+' ||
+                    value == '-' ||
+                    value == 'X' ||
+                    value == '/') {
+                  print("Value +- $numValue");
+                  data.addData(numValue);
+                  data.addData(value);
+                  input += value;
+                  numValue = "";
+                } else if (value == 'C') {
+                  input = "";
+                  numValue = "";
+                  data.clearData();
+                } else {
+                  print("Value$value");
+                  numValue += value;
+                  print(numValue);
+                  input += value;
+                }
               }
             });
           },
